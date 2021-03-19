@@ -33,4 +33,6 @@ public class Partner {
     private LocalDateTime updatedAt;
     private String updatedBy;
 
+    private Long categoryId;
+
 }
