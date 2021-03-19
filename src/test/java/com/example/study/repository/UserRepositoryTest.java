@@ -51,7 +51,17 @@ public class UserRepositoryTest extends StudyApplicationTests {
     @Transactional
     public void read(){
 
-        User user = userRepository.findFirstByPhoneNumberOrderByIdDesc("010-1111-2222");
+        User user = userRepository.findFirstByPhoneNumberOrderByIdDesc("010-1111-1111");
+
+        if(user!=null){
+            user.getOrderGroupList().stream().forEach(orderGroup -> {
+                System.out.println(orderGroup.getRevName());
+                System.out.println(orderGroup.getRevAddress());
+                System.out.println(orderGroup.getTotalPrice());
+                System.out.println(orderGroup.getTotalQuantity());
+            });
+
+        }
         Assertions.assertNotNull(user);
 
     }
