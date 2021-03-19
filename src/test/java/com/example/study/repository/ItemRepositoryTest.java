@@ -21,9 +21,8 @@ public class ItemRepositoryTest extends StudyApplicationTests {
         item.setPrice(100000);
         item.setContent("삼성 노트북");
 
-        Item newITem = itemRepository.save(item);
-        Assertions.assertNotNull(newITem);
-
+        Item newItem = itemRepository.save(item);
+        Assertions.assertNotNull(newItem);
     }
 
     @Test
