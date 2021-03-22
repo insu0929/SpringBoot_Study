@@ -4,6 +4,7 @@ import com.example.study.StudyApplicationTests;
 import com.example.study.model.entity.Item;
 import com.example.study.model.entity.User;
 import jdk.vm.ci.meta.Local;
+import net.bytebuddy.implementation.bind.MethodDelegationBinder;
 import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
 import org.junit.*;
 import org.junit.jupiter.api.Assertions;
@@ -64,8 +65,14 @@ public class UserRepositoryTest extends StudyApplicationTests {
 
                 System.out.println("----------주문상세----------");
                 orderGroup.getOrderDetailList().forEach(orderDetail -> {
+                    System.out.println("파트너사 이름: " + orderDetail.getItem().getPartner().getName());
+                    System.out.println("파트너사 카테고리: " + orderDetail.getItem().getPartner().getCategory().getTitle());
+                    System.out.println("주문상품: " + orderDetail.getItem().getName());
+                    System.out.println("고객센터 번호" + orderDetail.getItem().getPartner().getCallCenter());
                     System.out.println("주문상태: " + orderDetail.getStatus());
                     System.out.println("도착예정일자: " + orderDetail.getArrivalDate());
+
+
 
 
                 });
