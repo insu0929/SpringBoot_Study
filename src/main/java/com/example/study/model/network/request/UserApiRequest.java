@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,5 +25,7 @@ public class UserApiRequest {
 
     private String phoneNumber;
 
-    //가입 일자, 해지 일자는 클라이언트가 아니라 서버에서 생성
+    private LocalDateTime registeredAt;
+
+    private LocalDateTime unregisteredAt;
 }

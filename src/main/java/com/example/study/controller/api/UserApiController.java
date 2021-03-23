@@ -6,6 +6,7 @@ import com.example.study.model.network.request.UserApiRequest;
 import com.example.study.model.network.response.UserApiResponse;
 import com.example.study.service.UserApiLogicService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.juli.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,15 +27,16 @@ public class UserApiController implements CrudInterface <UserApiRequest, UserApi
     }
 
     @Override
-    @GetMapping({"id"}) //api/user/{id}
+    @GetMapping({"{id}"}) //api/user/{id}
     public Header<UserApiResponse> read(@PathVariable(name = "id") Long id) {
-        return null;
+        log.info("read id: {}", id);
+        return userApiLogicService.read(id);
     }
 
     @Override
     @PutMapping("") //api/user
-    public Header<UserApiResponse> update(@RequestBody Header<UserApiRequest> userApiRequest) {
-        return null;
+    public Header<UserApiResponse> update(@RequestBody Header<UserApiRequest> request) {
+        return userApiLogicService.update(request);
     }
 
     @Override

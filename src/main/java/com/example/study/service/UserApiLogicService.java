@@ -6,10 +6,12 @@ import com.example.study.model.network.Header;
 import com.example.study.model.network.request.UserApiRequest;
 import com.example.study.model.network.response.UserApiResponse;
 import com.example.study.repository.UserRepository;
+import jdk.javadoc.internal.doclets.formats.html.markup.Head;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class UserApiLogicService implements CrudInterface<UserApiRequest, UserApiResponse> {
@@ -45,12 +47,44 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
 
     @Override
     public Header<UserApiResponse> read(Long id) {
-        return null;
+
+        //id -> repository getOne, getById
+        Optional<User> optional = userRepository.findById(id);
+
+        //user -> userApiResponse return
+
+        return optional
+                .map(user -> response(user))
+                .orElseGet( () -> Header.ERROR("데이터 없음"));
     }
 
     @Override
-    public Header<UserApiResponse> update(Header<UserApiRequest> userApiRequest) {
-        return null;
+    public Header<UserApiResponse> update(Header<UserApiRequest> request) {
+
+        //1. data
+        UserApiRequest userApiRequest = request.getData();
+
+        //2.id -> user 데이터 찾고
+        Optional<User> optional = userRepository.findById(userApiRequest.getId());
+
+        return optional.map(user ->{
+            //3. update
+            user.setAccount(userApiRequest.getAccount())
+                    .setPassword(userApiRequest.getPassword())
+                    .setStatus(userApiRequest.getStatus())
+                    .setPhoneNumber(userApiRequest.getPhoneNumber())
+                    .setEmail(userApiRequest.getEmail())
+                    .setRegisteredAt(userApiRequest.getRegisteredAt())
+                    .setUnregisteredAt(userApiRequest.getUnregisteredAt());
+
+            return user;
+            //4. userApiResponse
+
+
+        })
+                .map(user -> userRepository.save(user))
+                .map(updateUser -> response(updateUser))
+                .orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
     @Override
