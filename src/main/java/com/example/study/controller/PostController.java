@@ -16,9 +16,6 @@ public class PostController {
 
     @PostMapping("/postMethod")
     public String postMethod(@RequestBody SearchParam searchParam){
-
-
-
         return "OK";
 
     }
