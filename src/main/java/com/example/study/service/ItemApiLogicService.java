@@ -22,7 +22,6 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
     @Autowired
     private ItemRepository itemRepository;
 
-
     @Override
     public Header<ItemApiResponse> create(Header<ItemApiRequest> request) {
 
