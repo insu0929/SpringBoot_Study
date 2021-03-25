@@ -7,20 +7,16 @@ import com.example.study.model.network.request.ItemApiRequest;
 import com.example.study.model.network.response.ItemApiResponse;
 import com.example.study.repository.ItemRepository;
 import com.example.study.repository.PartnerRepository;
-import jdk.javadoc.internal.doclets.formats.html.markup.Head;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
 @Service
-public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemApiResponse> {
+public class ItemApiLogicService extends BaseService<ItemApiRequest, ItemApiResponse, Item> {
 
-    @Autowired
-    private PartnerRepository partnerRepository;
 
-    @Autowired
-    private ItemRepository itemRepository;
+    PartnerRepository partnerRepository;
 
     @Override
     public Header<ItemApiResponse> create(Header<ItemApiRequest> request) {
@@ -40,14 +36,14 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
                 .partner(partnerRepository.getOne(body.getPartnerId()))
                 .build();
 
-        Item newItem = itemRepository.save(item);
+        Item newItem = baseRepository.save(item);
         return response(newItem);
     }
 
     @Override
     public Header<ItemApiResponse> read(Long id) {
 
-        return itemRepository.findById(id)
+        return baseRepository.findById(id)
                 .map(item -> response(item))
                 .orElseGet(() -> {
                     return Header.ERROR("데이터 없음");
@@ -59,7 +55,7 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
 
         ItemApiRequest body = req.getData();
 
-        itemRepository.findById(body.getId())
+        baseRepository.findById(body.getId())
                 .map(entityItem -> {
 
                     entityItem.setStatus(body.getStatus())
@@ -73,7 +69,7 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
                     return entityItem;
                 })
                 .map(newEntityItem->{
-                    itemRepository.save(newEntityItem);
+                    baseRepository.save(newEntityItem);
                     return newEntityItem;
                 })
                 .map(item -> response(item))
@@ -81,11 +77,33 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
         return null;
     }
 
+    // 6, 10, 13, 9, 8, 1
+
+    /*
+    * 1. oox, oxo, xoo 의 경우가 존재한다.
+ 1-2. oox 의 경우 dp[i-1] 가 된다.
+
+ 1-3. oxo 의 경우 dp[i-2] + arr[i] 가 된다.
+
+ 1-4. xoo 의 경우 do[i-3] + arr[i-1] + arr[i] 가 된다.
+
+2. 위의 3경우중 가장 큰 값을 선택하면 된다.
+
+ dp[i] = Math.max(dp[i - 1], Math.max(dp[i - 2] + arr[i], dp[i - 3] + arr[i - 1] + arr[i])) 라는 수식이 나온다.
+
+3. 끝.
+
+4. 아 여기서 N=1 일때와 2일때가 존재한다. 이때의 경우를 조건을 통해 잘 계산하도록 한다.
+
+
+    * */
+
+
     @Override
     public Header delete(Long id) {
-        return itemRepository.findById(id)
+        return baseRepository.findById(id)
                 .map(item -> {
-                    itemRepository.delete(item);
+                    baseRepository.delete(item);
                     return Header.OK();
                 })
                 .orElseGet(()->Header.ERROR("데이텉 없음"));
