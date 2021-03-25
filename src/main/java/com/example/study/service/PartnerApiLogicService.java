@@ -4,8 +4,11 @@ import com.example.study.model.entity.Partner;
 import com.example.study.model.network.Header;
 import com.example.study.model.network.request.PartnerApiRequest;
 import com.example.study.model.network.response.PartnerApiResponse;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PartnerApiLogicService extends BaseService<PartnerApiRequest, PartnerApiResponse, Partner>{
+
     @Override
     public Header<PartnerApiResponse> create(Header<PartnerApiRequest> request) {
         return null;
@@ -16,12 +19,11 @@ public class PartnerApiLogicService extends BaseService<PartnerApiRequest, Partn
 
         return baseRepository.findById(id)
                 .map(partner -> response(partner))
-                .orElseGet(()-> Header.ERROR("데이터 없음"));
-
+                .orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
     @Override
-    public Header<PartnerApiResponse> update(Header<PartnerApiRequest> req) {
+    public Header<PartnerApiResponse> update(Header<PartnerApiRequest> request) {
         return null;
     }
 
